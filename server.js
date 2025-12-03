@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Server Banyuwangi Marketplace (CRUD) Aktif!');
+app.get('/status', (req, res) => {
+    res.json({ ok: true, service: 'film-api_punya arya' });
 });
 
 app.get('/vendor-a', async (req, res, next) => {
@@ -25,6 +25,10 @@ app.get('/vendor-a', async (req, res, next) => {
         }));
         res.json(data);
     } catch (err) { next(err); }
+});
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'Rute tidak ditemukan' });
 });
 
 app.use((err,req,res,next) =>{ 

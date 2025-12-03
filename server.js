@@ -20,3 +20,5 @@ app.use((err,req,res,next) =>{
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server aktif di http://localhost:${PORT}`);
 });
+
+module.exports = app;

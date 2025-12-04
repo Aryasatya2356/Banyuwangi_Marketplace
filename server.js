@@ -36,7 +36,7 @@ app.get('/vendor-a/:id', async (req, res, next)=>{
     }
 }); 
 
-app.post('/vendor-a', authenticateToken, async (req, res, next) => {
+app.post('/vendor-a', async (req, res, next) => {
     const { kd_produk, nm_brg, hrg, ket_stok } = req.body;
     if (!kd_produk || !nm_brg || !hrg || !ket_stok) {
         return res.status(400).json({ error: 'kd_produk, nm_brg, hrg, ket_stok wajib diisi'});

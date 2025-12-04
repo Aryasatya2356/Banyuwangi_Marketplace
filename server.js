@@ -163,7 +163,7 @@ app.get('/vendor-b', async(req, res, next) => {
     const sql = 'SELECT id, sku, "productName", price, "isAvailable" FROM vendor_b ORDER BY id ASC';
     try {
         const result = await db.query(sql);
-        res.json(result.rows);
+        res.json(result.rows[0]);
     } catch (err) {
         next(err);
     }

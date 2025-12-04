@@ -52,7 +52,7 @@ app.post('/vendor-a', async (req, res, next) => {
 
 app.put('/vendor-a', async (req, res, next) => {
     const {kd_produk, nm_brg, hrg, ket_stok} = req.body;
-    const sql ='UPDATE vendor_a SET kd_produk = $1, nm_brg =2, hrg =3, ket_stok =4, WHERE id =5 RETURNING *';
+    const sql ='UPDATE vendor_a SET kd_produk = $1, nm_brg =$2, hrg =$3, ket_stok =$4, WHERE id =$5 RETURNING *';
     try{
         const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok, req.params.id]);
         if  (result.rowCount === 0) {

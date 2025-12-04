@@ -22,7 +22,7 @@ app.get('/vendor-a', async(req, res, next) => {
     }
 });
 
-app.get('/vendor-a/:id', async (rec, res, next)=>{
+app.get('/vendor-a/:id', async (req, res, next)=>{
     const sql = 'SELECT id, kd_produk, nm_brg, hrg, ket_stok FROM vendor_a where id = $1';
     try {
         const result = await db.query(sql, [req.params.id]);

@@ -47,6 +47,34 @@ app.get('/vendor-a', async(req, res, next) => {
 //     }
 // });
 
+app.post('/vendor-a', async (req, res, next) => {
+    const { kd_produk, nm_brg, hrg, ket_stok} = req.body;
+    if (!kd_produk || !nm_brg || !hrg || !ket_stok){
+        return res.status(400).json({ error: 'kd_produk, nm_brg, hrg, ket_stok wajib diisi'});
+    }
+    const sql = 'INSERT INTO vendor_a (kd_produk, nm_brg, hrg, ket_stok) VALUES ($1, $2, $3, $4) RETURNING *';
+    try {
+        const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok]);
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        next(err);
+    }
+})
+
+// app.post('/movies', authenticateToken, async (req, res, next) => {
+//     const { title, director_id, year } = req.body;
+//     if (!title || !director_id || !year) {
+//         return res.status(400).json({ error: 'title, director_id, year wajib diisi' });
+//     }
+//     const sql = 'INSERT INTO movies (title, director_id, year) VALUES ($1, $2, $3) RETURNING *';
+//     try {
+//         const result = await db.query(sql, [title, director_id, year]);
+//         res.status(201).json(result.rows[0]);
+//     } catch (err) {
+//         next(err);
+//     }
+// });
+
 app.use((req, res) => {
     res.status(404).json({ error: 'Rute tidak ditemukan' });
 });

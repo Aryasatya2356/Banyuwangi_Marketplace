@@ -225,6 +225,61 @@ app.delete('/vendor-b/:id',[authenticateToken, authorizeRole('admin')], async (r
 });
 
 
+//LEAD INTEGRATOR ARYA
+app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
+    try {
+        const protocol = req.protocol;
+        const host = req.get('host');
+        const baseUrl = `${protocol}://${host}`;
+
+        const [resA, resB, resC] = await Promise.all([
+            fetch(`${baseUrl}/vendor-a`),
+            fetch(`${baseUrl}/vendor-b`),
+            fetch(`${baseUrl}/status`),
+        ]);
+
+        const dataA = await resA.json();
+        const dataB = await resB.json();
+        const dataC = await resC.json();
+
+        let normalizeData = [];
+
+        const mapA = dataA.map(item => {
+            let harga = parseInt(item.hrg);
+            let hargaFinal = harga - (harga * 0.10);
+            return {
+                id: item.kd_produk,
+                nama_produk: item.nm_brg,
+                harga: hargaFinal,
+                status: item.ket_stok,
+                sumber: "vendor A"
+            };
+        });
+
+        const mapB = dataB.map(item => {
+            let status = item.isAvailable ? "Tersedia" : "Habis";
+            return {
+                id: item.sku,
+                nama_produk: item.productName,
+                harga: item.price,
+                status:status,
+                sumber: "Vendor B"
+            };
+        });
+
+        normalizeData = [...mapA, ...mapB];
+
+        res.json({
+            status: "success",
+            total_data: normalizeData.length,
+            data: normalizeData
+        });
+    } catch (err) {
+        next(err);
+    }
+})
+
+
 app.use((req, res) => {
     res.status(404).json({ error: 'Rute tidak ditemukan' });
 });

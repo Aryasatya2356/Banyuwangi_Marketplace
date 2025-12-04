@@ -11,6 +11,7 @@ app.use(express.json());
 app.get('/status', (req, res) => {
     res.json({ ok: true, service: 'film-api_punya arya' });
 });
+
 // vendor A Wempi
 app.get('/vendor-a', async(req, res, next) => {
     const sql = 'SELECT id, kd_produk, nm_brg, hrg, ket_stok FROM vendor_a ORDER BY id ASC';
@@ -35,6 +36,19 @@ app.get('/vendor-a/:id', async (req, res, next)=>{
     }
 }); 
 
+app.post('/vendor-a', authenticateToken, async (req, res, next) => {
+    const { kd_produk, nm_brg, hrg, ket_stok } = req.body;
+    if (!kd_produk || !nm_brg || !hrg || !ket_stok) {
+        return res.status(400).json({ error: 'kd_produk, nm_brg, hrg, ket_stok wajib diisi'});
+    }
+    const sql = 'INSERT INTO vendor_a (kd_produk, nm_brg, hrg, ket_stok) VALUES ($1, $2, $3, $4) RETURNING *';
+    try{
+        const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok]);
+        res.status(201).json(result.rows[0]);
+    }catch (err){
+        next(err);
+    }
+});
 
 
 

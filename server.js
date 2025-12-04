@@ -163,7 +163,7 @@ app.get('/vendor-b', async(req, res, next) => {
     const sql = 'SELECT id, sku, "productName", price, "isAvailable" FROM vendor_b ORDER BY id ASC';
     try {
         const result = await db.query(sql);
-        res.json(result.rows[0]);
+        res.json(result.rows);
     } catch (err) {
         next(err);
     }
@@ -204,7 +204,7 @@ app.put('/vendor-b/:id', [authenticateToken, authorizeRole('admin')], async (req
         if  (result.rowCount === 0) {
             return res.status(404).json({error: 'Produk tidak ditemukan'});
         }
-        res.json(result.rowCount);
+        res.json(result.rows[0]);
     } catch (err) {
         next (err);
     }  

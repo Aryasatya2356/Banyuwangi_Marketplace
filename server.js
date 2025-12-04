@@ -37,6 +37,32 @@ app.get('/vendor-a', async(req, res, next) => {
     }
 });
 
+app.get('/vendor-a/:id', async (req, res, next) => {
+    const sql = 'SELECT id, kd_produk, nm_brg, hrg, ket_stok FROM vendor_a WHERE id = $1';
+    try{
+        const result = await db.query(sql, [req.params.id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Produk tidak ditemukan'});
+        }
+        res.json(result.rows[0]);
+    } catch (err) {
+        next (err);
+    }
+});
+
+// app.get('/movies/:id', async (req, res, next) => {
+//     const sql = 'SELECT m.id, m.year, d.id as director_id, d.name as director_name FROM movies m LEFT JOIN directors d ON m.director_id = d.id WHERE m.id = $1';
+//     try {
+//         const result = await db.query(sql, [req.params.id]);
+//         if (result.rows.length === 0) {
+//             return  res.status(404).json({ error: 'Film tidak ditemukan' });
+//         }
+//         res.json(result.rows[0]);
+//     } catch (err){
+//         next(err);
+//     }
+// });
+
 // app.get('/movies', async (req, res, next) => {
 //     const sql = 'SELECT m.id, m.title, m.year, d.id as director_id, d.name as director_name FROM movies m LEFT JOIN directors d ON m.director_id = d.id ORDER BY m.id ASC';
 //     try {
@@ -70,6 +96,22 @@ app.post('/vendor-a', async (req, res, next) => {
 //     try {
 //         const result = await db.query(sql, [title, director_id, year]);
 //         res.status(201).json(result.rows[0]);
+//     } catch (err) {
+//         next(err);
+//     }
+// });
+
+app.put
+
+// app.put('/movies/:id', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
+//     const { title, director_id, year } = req.body;
+//     const sql = 'UPDATE movies SET title = $1, director_id = $2, year = $3 WHERE id = $4 RETURNING *';
+//     try {
+//         const result = await db.query(sql, [title, director_id, year, req.params.id]);
+//         if (result.rowCount === 0) {
+//             return  res.status(404).json({ error: 'Film tidak ditemukan' });
+//         }
+//         res.json(result.rows[0]);
 //     } catch (err) {
 //         next(err);
 //     }

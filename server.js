@@ -11,7 +11,7 @@ app.use(express.json());
 app.get('/status', (req, res) => {
     res.json({ ok: true, service: 'film-api_punya arya' });
 });
-
+// vendor A Wempi
 app.get('/vendor-a', async(req, res, next) => {
     const sql = 'SELECT id, kd_produk, nm_brg, hrg, ket_stok FROM vendor_a ORDER BY id ASC';
     try {
@@ -21,6 +21,22 @@ app.get('/vendor-a', async(req, res, next) => {
         next(err);
     }
 });
+
+app.get('/vendor-a/:id', async (rec, res, next)=>{
+    const sql = 'SELECT id, kd_produk, nm_brg, hrg, ket_stok FROM vendor_a where id = $1';
+    try {
+        const result = await db.query(sql, [req.params.id]);
+        if (result.rowCount.length ===0){
+            return res.status(404).json({ error: 'Produk tidak ditemukan'});
+        }
+        res.json(result.rows[0]);
+    }catch (err){
+        next(err);
+    }
+}); 
+
+
+
 
 app.use((req, res) => {
     res.status(404).json({ error: 'Rute tidak ditemukan' });

@@ -107,7 +107,7 @@ app.post('/vendor-b', async (req, res, next) => {
     if (!sku || !productName || !price || !isAvailable) {
         return res.status(400).json({ error: 'sku, "productName", price, "isAvailable"'});
     }
-    const sql = 'INSERT INTO vendor_a (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3, $4) RETURNING *';
+    const sql = 'INSERT INTO vendor_b (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3, $4) RETURNING *';
     try{
         const result = await db.query(sql, [sku, productName, price, isAvailable]);
         res.status(201).json(result.rows[0]);

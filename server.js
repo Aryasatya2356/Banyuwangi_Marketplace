@@ -90,7 +90,7 @@ app.get('/vendor-b', async(req, res, next) => {
 });
 
 app.get('/vendor-b/:id', async (req, res, next)=>{
-    const sql = 'SELECT id, sku, productName, price, isAvailable FROM vendor_b where id = $1';
+    const sql = 'SELECT id, sku, "productName", price, "isAvailable" FROM vendor_b where id = $1';
     try {
         const result = await db.query(sql, [req.params.id]);
         if (result.rowCount.length ===0){
@@ -105,9 +105,9 @@ app.get('/vendor-b/:id', async (req, res, next)=>{
 app.post('/vendor-b', async (req, res, next) => {
     const { sku, productName, price, isAvailable } = req.body;
     if (!sku || !productName || !price || !isAvailable) {
-        return res.status(400).json({ error: 'sku, productName, price, isAvailable'});
+        return res.status(400).json({ error: 'sku, "productName", price, "isAvailable"'});
     }
-    const sql = 'INSERT INTO vendor_a (sku, productName, price, isAvailable) VALUES ($1, $2, $3, $4) RETURNING *';
+    const sql = 'INSERT INTO vendor_a (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3, $4) RETURNING *';
     try{
         const result = await db.query(sql, [sku, productName, price, isAvailable]);
         res.status(201).json(result.rows[0]);
@@ -118,7 +118,7 @@ app.post('/vendor-b', async (req, res, next) => {
 
 app.put('/vendor-b/:id', async (req, res, next) => {
     const {sku, productName, price, isAvailable } = req.body;
-    const sql ='UPDATE vendor_b SET sku = $1, productName =$2, price =$3, isAvailable =$4 WHERE id =$5 RETURNING *';
+    const sql ='UPDATE vendor_b SET sku = $1, "productName" =$2, price =$3, "isAvailable" =$4 WHERE id =$5 RETURNING *';
     try{
         const result = await db.query(sql, [sku, productName, price, isAvailable, req.params.id]);
         if  (result.rowCount === 0) {

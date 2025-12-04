@@ -80,7 +80,7 @@ app.delete('/vendor-a/:id', async (req, res, next) =>{
 
 // vendor B Zul kelompok 1
 app.get('/vendor-b', async(req, res, next) => {
-    const sql = 'SELECT id, sku, productName, price, isAvailable FROM vendor_b ORDER BY id ASC';
+    const sql = 'SELECT id, sku, "productName", price, "isAvailable" FROM vendor_b ORDER BY id ASC';
     try {
         const result = await db.query(sql);
         res.json(result.rows);

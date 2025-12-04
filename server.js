@@ -50,6 +50,33 @@ app.post('/vendor-a', async (req, res, next) => {
     }
 });
 
+app.put('/vendor-a', async (req, res, next) => {
+    const {kd_produk, nm_brg, hrg, ket_stok} = req.body;
+    const sql ='UPDATE vendor_a SET kd_produk = $1, nm_brg =2, hrg =3, ket_stok =4, WHERE id =5 RETURNING *';
+    try{
+        const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok, req.params.id]);
+        if  (result.rowCount === 0) {
+            return res.status(404).json({error: 'Produk tidak ditemukan'});
+        }
+        res.json(result.rows[0]);
+    } catch (err) {
+        next (err);
+    }  
+});
+
+
+app.delete('/vendor-a', async (req, res, next) =>{
+    const sql = 'DELETE FROM vendor_a WHERE id = $1 RETURNING *';
+    try{
+        const result = await db.query(sql, [req.params.id]);
+        if (result.rowCount === 0 ) {
+            return res.status(404).json({ error: 'Produk tidak ditemukan'});
+        }
+        res.status(204).send();
+    }catch (err) {
+        next (err);
+    }
+});
 
 
 app.use((req, res) => {

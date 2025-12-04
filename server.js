@@ -50,7 +50,7 @@ app.post('/vendor-a', async (req, res, next) => {
     }
 });
 
-app.put('/vendor-a', async (req, res, next) => {
+app.put('/vendor-a/:id', async (req, res, next) => {
     const {kd_produk, nm_brg, hrg, ket_stok} = req.body;
     const sql ='UPDATE vendor_a SET kd_produk = $1, nm_brg =$2, hrg =$3, ket_stok =$4, WHERE id =$5 RETURNING *';
     try{
@@ -65,7 +65,7 @@ app.put('/vendor-a', async (req, res, next) => {
 });
 
 
-app.delete('/vendor-a', async (req, res, next) =>{
+app.delete('/vendor-a/:id', async (req, res, next) =>{
     const sql = 'DELETE FROM vendor_a WHERE id = $1 RETURNING *';
     try{
         const result = await db.query(sql, [req.params.id]);

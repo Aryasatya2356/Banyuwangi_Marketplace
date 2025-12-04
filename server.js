@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/status', (req, res) => {
-    res.json({ ok: true, service: 'film-api_punya arya' });
+    res.json({ ok: true, service: 'banyuwangi-marketplace_kelompok1' });
 });
 
 //registrasi

@@ -116,7 +116,7 @@ app.post('/vendor-a', authenticateToken, async (req, res, next) => {
 });
 
 app.put('/vendor-a/:kd_produk', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
-    const {nm_brg, hrg, ket_stok} = req.body;
+    const {kd_produk, nm_brg, hrg, ket_stok} = req.body;
     const sql ='UPDATE vendor_a SET nm_brg =$1, hrg =$2, ket_stok =$3 WHERE kd_produk =$4 RETURNING *';
     try{
         const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok, req.params.kd_produk]);

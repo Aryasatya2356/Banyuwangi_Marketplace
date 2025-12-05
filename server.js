@@ -174,7 +174,7 @@ app.post('/vendor-b', authenticateToken, async (req, res, next) => {
     }
     const sql = 'INSERT INTO vendor_b (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3, $4 ) RETURNING *';
     try{
-        const result = await db.query(sql, [productName, price, isAvailable]);
+        const result = await db.query(sql, [sku, productName, price, isAvailable]);
         res.status(201).json(result.rows[0]);
     }catch (err){
         next(err);

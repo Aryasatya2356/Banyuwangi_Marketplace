@@ -92,7 +92,7 @@ app.get('/vendor-a/:kd_produk', async (req, res, next)=>{
     const sql = 'SELECT kd_produk, nm_brg, hrg, ket_stok FROM vendor_a where kd_produk = $1';
     try {
         const result = await db.query(sql, [req.params.kd_produk]);
-        if (result.rows.length ===0){
+        if (result.rows.length === 0){
             return res.status(404).json({ error: 'Produk tidak ditemukan'});
         }
         res.json(result.rows[0]);
@@ -172,7 +172,7 @@ app.post('/vendor-b', authenticateToken, async (req, res, next) => {
     if (!sku ||!productName || !price || !isAvailable) {
         return res.status(400).json({ error: '"productName", price, "isAvailable" wajib diisi'});
     }
-    const sql = 'INSERT INTO vendor_b (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3 ) RETURNING *';
+    const sql = 'INSERT INTO vendor_b (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3, $4 ) RETURNING *';
     try{
         const result = await db.query(sql, [productName, price, isAvailable]);
         res.status(201).json(result.rows[0]);

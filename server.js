@@ -79,7 +79,7 @@ app.post('/auth/login', async (req, res, next) => {
 
 // vendor A Wempi kelompok 1
 app.get('/vendor-a', async(req, res, next) => {
-    const sql = 'SELECT  kd_produk, nm_brg, hrg, ket_stok FROM vendor_a ORDER BY kd_product ASC';
+    const sql = 'SELECT  kd_produk, nm_brg, hrg, ket_stok FROM vendor_a ORDER BY kd_produk ASC';
     try {
         const result = await db.query(sql);
         res.json(result.rows);
@@ -88,10 +88,10 @@ app.get('/vendor-a', async(req, res, next) => {
     }
 });
 
-app.get('/vendor-a/:kd_product', async (req, res, next)=>{
-    const sql = 'SELECT kd_produk, nm_brg, hrg, ket_stok FROM vendor_a where kd_product = $1';
+app.get('/vendor-a/:kd_produk', async (req, res, next)=>{
+    const sql = 'SELECT kd_produk, nm_brg, hrg, ket_stok FROM vendor_a where kd_produk = $1';
     try {
-        const result = await db.query(sql, [req.params.kd_product]);
+        const result = await db.query(sql, [req.params.kd_produk]);
         if (result.rows.length ===0){
             return res.status(404).json({ error: 'Produk tidak ditemukan'});
         }
@@ -115,11 +115,11 @@ app.post('/vendor-a', authenticateToken, async (req, res, next) => {
     }
 });
 
-app.put('/vendor-a/:kd_product', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
+app.put('/vendor-a/:kd_produk', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
     const {nm_brg, hrg, ket_stok} = req.body;
-    const sql ='UPDATE vendor_a SET nm_brg =$1, hrg =$2, ket_stok =$3 WHERE kd_product =$4 RETURNING *';
+    const sql ='UPDATE vendor_a SET nm_brg =$1, hrg =$2, ket_stok =$3 WHERE kd_produk =$4 RETURNING *';
     try{
-        const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok, req.params.kd_product]);
+        const result = await db.query(sql, [kd_produk, nm_brg, hrg, ket_stok, req.params,kd_produk]);
         if  (result.rowCount === 0) {
             return res.status(404).json({error: 'Produk tidak ditemukan'});
         }
@@ -130,10 +130,10 @@ app.put('/vendor-a/:kd_product', [authenticateToken, authorizeRole('admin')], as
 });
 
 
-app.delete('/vendor-a/:kd_product', [authenticateToken, authorizeRole('admin')], async (req, res, next) =>{
-    const sql = 'DELETE FROM vendor_a WHERE kd_product = $1 RETURNING *';
+app.delete('/vendor-a/:kd_produk', [authenticateToken, authorizeRole('admin')], async (req, res, next) =>{
+    const sql = 'DELETE FROM vendor_a WHERE kd_produk = $1 RETURNING *';
     try{
-        const result = await db.query(sql, [req.params.kd_product]);
+        const result = await db.query(sql, [req.params.kd_produk]);
         if (result.rowCount === 0 ) {
             return res.status(404).json({ error: 'Produk tidak ditemukan'});
         }

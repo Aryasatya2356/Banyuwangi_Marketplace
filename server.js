@@ -215,11 +215,116 @@ app.get(`/vendor-c`, async (req, res, next) => {
     const sql = 'Select * FROM vendor_c ORDER BY  id ASC';
     try {
         const result = await db.query(sql);
-        res.json(result.rows);
+        const data = result.rows.map(row => ({
+            id_db: row.id,
+            id:row.custom_id,
+            details:{
+                name:row.name,
+                category:row.category,
+            },
+            Pricing:{
+                base_price:row.base_price,
+                Tax:row.tax
+            },
+            stock:row.stock
+        }));
+        res.json(data);
     } catch (err) {
         next(err);
     }
 });
+
+app.get(`/vendor-c/:id`, async(req, res, next) => {
+    'SELECT * FROM vendor_c WHERE ID =$1';
+    try {
+        const result  = await db.query(sql, [req.params.id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({error: `Prosduk Not FOund`});
+        }
+        const row = result.rows[0];
+
+        const data = {
+            id:row.id,
+            id:row.custom_id,
+            details:{
+                name:row.name,
+                category:row.category,
+            },
+            Pricing:{
+                base_price:row.base_price,
+                Tax:row.tax
+            },
+            stock:row.stock
+        };
+        res.json(data);
+    } catch (err){
+        next(err);
+    }
+});
+
+app.post(`/vendor-c`, async(req, res, next) =>{
+    const {id, details, pricing, stock} = req.body;
+
+    if(!id  || !details?.name||!details?.category || !pricing?.base_price || !pricing?.tax ) {
+        return res.status(400).json({error: `Data JSON tidak lengkap(pastikan lengkap)`});
+    }
+
+    const sql = 'INSERT INTO vendor_c (custom_id, name, category, base_price, tax, stock) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+
+    try{
+          const result = await db.query(sql, [
+            id,
+            details.name,
+            details.category,
+            pricing.base_price,
+            pricing.tax,
+            stock
+          ]);
+          res.status(201).json(result.rows[0]);
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.put(`/vendor-c/:id`, async(req, res, next) => {
+    const{id, details, pricing, stock}=req.body;
+
+    const sql = 'UPDATE vendor_c SET custom_id=$1, name=$2, category=$3, base_price=$4, tax=$5, stock=$6';
+
+    try {
+        const result = await db.query(sql, [
+            id,
+            details.name,
+            details.category,
+            pricing.base_price,
+            pricing.tax,
+            stock,
+            req.params.id
+        ]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({error: `Data Not Found`});
+        }
+        res.json(result.rows[0]);
+    }catch(err){
+        next(err);
+    }
+});
+
+app.delete(`/vendor-c/:id`, async(req, res, next) => {
+    const sql = 'DELETE FROM vendor_c where ID=$1 RETURNING *';
+    try{
+        const result =await db.query(sql, [req.params.id]);
+        if (result.rowCount === 0) {
+            return res.status(404).json({error: `DATA Not FOund`});
+        }
+        res.status(204).send();
+    }catch(err){
+        next(err);
+    }
+});
+
 
 
 //LEAD INTEGRATOR ARYA

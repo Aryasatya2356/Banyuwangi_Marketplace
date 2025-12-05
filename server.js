@@ -168,8 +168,8 @@ app.get('/vendor-b/:sku', async (req, res, next)=>{
 }); 
 
 app.post('/vendor-b', authenticateToken, async (req, res, next) => {
-    const { sku, productName, price, isAvailable = undefined } = req.body;
-    if (!sku ||!productName || !price || !isAvailable) {
+    const { sku, productName, price, isAvailable } = req.body;
+    if (!sku || !productName || !price || isAvailable === undefined){
         return res.status(400).json({ error: '"productName", price, "isAvailable" wajib diisi'});
     }
     const sql = 'INSERT INTO vendor_b (sku, "productName", price, "isAvailable") VALUES ($1, $2, $3, $4 ) RETURNING *';

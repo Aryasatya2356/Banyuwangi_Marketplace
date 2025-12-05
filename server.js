@@ -216,7 +216,7 @@ app.get(`/vendor-c`, async (req, res, next) => {
     try {
         const result = await db.query(sql);
         const data = result.rows.map(row => ({
-            id_db: row.id,
+            id: row.id,
             id:row.custom_id,
             details:{
                 name:row.name,
@@ -235,7 +235,7 @@ app.get(`/vendor-c`, async (req, res, next) => {
 });
 
 app.get(`/vendor-c/:id`, async(req, res, next) => {
-    'SELECT * FROM vendor_c WHERE ID =$1';
+    const sql = 'SELECT * FROM vendor_c WHERE ID =$1';
     try {
         const result  = await db.query(sql, [req.params.id]);
 

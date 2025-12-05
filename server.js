@@ -210,6 +210,18 @@ app.delete('/vendor-b/:id',[authenticateToken, authorizeRole('admin')], async (r
 });
 
 
+//vendor C (Restu sulung Purpangestu)
+app.get(`/vendor-c`, async (req, res, next) => {
+    const sql = 'Select * FROM vendor_c ORDER BY  id ASC';
+    try {
+        const result = await db.query(sql);
+        res.json(result.rows);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 //LEAD INTEGRATOR ARYA
 app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
     try {

@@ -124,7 +124,7 @@ app.put('/vendor-a/:kd_produk', [authenticateToken, authorizeRole('admin')], asy
             return res.status(404).json({error: 'Produk tidak ditemukan'});
         }
         res.json(result.rows[0]);
-    } catch (err) {S
+    } catch (err) {
         next (err);
     }  
 });

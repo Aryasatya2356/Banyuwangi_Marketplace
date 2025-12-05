@@ -367,7 +367,9 @@ app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
         });
 
             const mapC = dataC.map(item => {
-            let finalPrice = item.pricing.base_price + item.pricing.tax;
+            let base = parseInt(item.pricing?.base_price || 0);
+            let tax = parseInt(item.pricing?.tax || 0);
+            let finalPrice = base + tax;
             let name = item.details.name;
             if (item.details.category === 'Food') name += " (Recommended)";
             let status = item.stock > 0 ? "Tersedia" : "Habis";

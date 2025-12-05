@@ -290,7 +290,7 @@ app.post(`/vendor-c`, async(req, res, next) =>{
 app.put(`/vendor-c/:id`, async(req, res, next) => {
     const{id, details, pricing, stock}=req.body;
 
-    const sql = 'UPDATE vendor_c SET custom_id=$1, name=$2, category=$3, base_price=$4, tax=$5, stock=$6';
+    const sql = 'UPDATE vendor_c SET custom_id=$1, name=$2, category=$3, base_price=$4, tax=$5, stock=$6 WHERE ID =$7 RETURNING *';
 
     try {
         const result = await db.query(sql, [

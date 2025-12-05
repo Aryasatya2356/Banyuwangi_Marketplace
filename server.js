@@ -367,7 +367,7 @@ app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
         });
 
             const mapC = dataC.map(item => {
-            let finalPrice = item.pricing.base_price + item.pricing.tax;
+            let finalPrice = item.Pricing.base_price + item.Pricing.tax;
             let name = item.details.name;
             if (item.details.category === 'Food') name += " (Recommended)";
             let status = item.stock > 0 ? "Tersedia" : "Habis";
@@ -380,7 +380,7 @@ app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
             };
         });
 
-        normalizeData = [...mapA, ...mapB];
+        normalizeData = [...mapA, ...mapB, ...mapC];
 
         res.json({
             status: "success",

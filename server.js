@@ -18,21 +18,6 @@ app.get('/status', (req, res) => {
     res.json({ ok: true, service: 'banyuwangi-marketplace_kelompok1' });
 });
 
-//registrasi
-// app.post('/auth/register', async (req, res, next) => {
-//     const { username, password, role } = req.body;
-//     if (!username || !password || !role) {
-//         return res.status(400).json({ error: 'username, password, role wajib diisi'});
-//     }
-//     const sql = 'INSERT INTO users (username, password, role) VALUES ($1, $2, $3) RETURNING *';
-//     try{
-//         const result = await db.query(sql, [username, password, role]);
-//         res.status(201).json(result.rows[0]);
-//     }catch (err){
-//         next(err);
-//     }
-// });
-
 app.post('/auth/register', async (req, res, next) => {
     const { username, password } = req.body;
     if (!username || !password || password.length <6 ) {
@@ -107,7 +92,7 @@ app.get('/vendor-a/:id', async (req, res, next)=>{
     const sql = 'SELECT id, kd_produk, nm_brg, hrg, ket_stok FROM vendor_a where id = $1';
     try {
         const result = await db.query(sql, [req.params.id]);
-        if (result.rowCount.length ===0){
+        if (result.rows.length ===0){
             return res.status(404).json({ error: 'Produk tidak ditemukan'});
         }
         res.json(result.rows[0]);

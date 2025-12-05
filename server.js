@@ -221,9 +221,9 @@ app.get(`/vendor-c`, async (req, res, next) => {
                 name:row.name,
                 category:row.category,
             },
-            Pricing:{
+            pricing:{
                 base_price:row.base_price,
-                Tax:row.tax
+                tax:row.tax
             },
             stock:row.stock
         }));
@@ -249,9 +249,9 @@ app.get(`/vendor-c/:id`, async(req, res, next) => {
                 name:row.name,
                 category:row.category,
             },
-            Pricing:{
+            pricing:{
                 base_price:row.base_price,
-                Tax:row.tax
+                tax:row.tax
             },
             stock:row.stock
         };
@@ -264,22 +264,22 @@ app.get(`/vendor-c/:id`, async(req, res, next) => {
 app.post(`/vendor-c`, async(req, res, next) =>{
     const {id, details, pricing, stock} = req.body;
 
-    if(!id  || !details?.name||!details?.category || !pricing?.base_price || !pricing?.tax ) {
+    if(!id  || !details?.name|| !details?.category || !pricing?.base_price || !pricing?.tax ) {
         return res.status(400).json({error: `Data JSON tidak lengkap(pastikan lengkap)`});
     }
 
     const sql = 'INSERT INTO vendor_c (id, name, category, base_price, tax, stock) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
 
     try{
-          const result = await db.query(sql, [
+        const result = await db.query(sql, [
             id,
             details.name,
             details.category,
             pricing.base_price,
             pricing.tax,
             stock
-          ]);
-          res.status(201).json(result.rows[0]);
+        ]);
+        res.status(201).json(result.rows[0]);
     } catch (err) {
         next(err);
     }
@@ -367,7 +367,7 @@ app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
         });
 
             const mapC = dataC.map(item => {
-            let finalPrice = item.Pricing.base_price + item.Pricing.tax;
+            let finalPrice = item.pricing.base_price + item.pricing.tax;
             let name = item.details.name;
             if (item.details.category === 'Food') name += " (Recommended)";
             let status = item.stock > 0 ? "Tersedia" : "Habis";

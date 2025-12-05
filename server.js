@@ -101,7 +101,7 @@ app.get('/vendor-a/:kd_produk', async (req, res, next)=>{
     }
 }); 
 
-app.post('/vendor-a', authenticateToken, async (req, res, next) => {
+app.post('/vendor-a', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
     const { kd_produk, nm_brg, hrg, ket_stok } = req.body;
     if (!kd_produk || !nm_brg || !hrg || !ket_stok) {
         return res.status(400).json({ error: 'kd_produk, nm_brg, hrg, ket_stok wajib diisi'});
@@ -167,7 +167,7 @@ app.get('/vendor-b/:sku', async (req, res, next)=>{
     }
 }); 
 
-app.post('/vendor-b', authenticateToken, async (req, res, next) => {
+app.post('/vendor-b', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
     const { sku, productName, price, isAvailable } = req.body;
     if (!sku || !productName || !price || isAvailable === undefined){
         return res.status(400).json({ error: '"productName", price, "isAvailable" wajib diisi'});
@@ -261,7 +261,7 @@ app.get(`/vendor-c/:id`, async(req, res, next) => {
     }
 });
 
-app.post(`/vendor-c`, async(req, res, next) =>{
+app.post(`/vendor-c`, authenticateToken, async(req, res, next) =>{
     const {id, details, pricing, stock} = req.body;
 
     if(!id  || !details?.name|| !details?.category || !pricing?.base_price || !pricing?.tax ) {
@@ -285,7 +285,7 @@ app.post(`/vendor-c`, async(req, res, next) =>{
     }
 });
 
-app.put(`/vendor-c/:id`, async(req, res, next) => {
+app.put(`/vendor-c/:id`, [authenticateToken, authorizeRole('admin')], async(req, res, next) => {
     const{details, pricing, stock}=req.body;
 
     const sql = 'UPDATE vendor_c SET name=$1, category=$2, base_price=$3, tax=$4, stock=$5 WHERE ID =$6 RETURNING *';
@@ -309,7 +309,7 @@ app.put(`/vendor-c/:id`, async(req, res, next) => {
     }
 });
 
-app.delete(`/vendor-c/:id`, async(req, res, next) => {
+app.delete(`/vendor-c/:id`, [authenticateToken, authorizeRole('admin')], async(req, res, next) => {
     const sql = 'DELETE FROM vendor_c where ID=$1 RETURNING *';
     try{
         const result =await db.query(sql, [req.params.id]);

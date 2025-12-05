@@ -346,10 +346,11 @@ app.get('/api/banyuwangi-marketplace', async (req, res, next) => {
         const mapA = dataA.map(item => {
             let harga = parseInt(item.hrg);
             let hargaFinal = harga - (harga * 0.10);
+            let pajak = hargaFinal + 500;
             return {
                 id: item.kd_produk,
                 nama_produk: item.nm_brg,
-                harga: hargaFinal,
+                harga: pajak,
                 status: item.ket_stok,
                 sumber: "vendor A"
             };
